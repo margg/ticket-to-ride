@@ -115,92 +115,93 @@ function init() {
         panamera = THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
         panamera.position.set(0, -4, -15);
         panamera.rotation.z = Math.PI;
-        panamera.rotation.x = -Math.PI/2;
+        panamera.rotation.x = -Math.PI / 2;
         // panamera.add(camera);
         // scene.add(panamera);
-    });
+        // });
 
 
-    camera.add(panamera);
+        camera.add(panamera);
 
-    controls = new THREE.PointerLockControls(camera);
-    scene.add(controls.getObject());
+        controls = new THREE.PointerLockControls(camera);
+        scene.add(controls.getObject());
 
-    ray = new THREE.Raycaster();
-    ray.ray.direction.set(0, -1, 0);
+        ray = new THREE.Raycaster();
+        ray.ray.direction.set(0, -1, 0);
 
-    // floor
+        // floor
 
-    geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
-    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
+        geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
+        geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
 
-    for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+        for (var i = 0, l = geometry.vertices.length; i < l; i++) {
 
-        var vertex = geometry.vertices[i];
-        vertex.x += Math.random() * 20 - 10;
-        vertex.y += Math.random() * 2;
-        vertex.z += Math.random() * 20 - 10;
+            var vertex = geometry.vertices[i];
+            vertex.x += Math.random() * 20 - 10;
+            vertex.y += Math.random() * 2;
+            vertex.z += Math.random() * 20 - 10;
 
-    }
+        }
 
-    for (var i = 0, l = geometry.faces.length; i < l; i++) {
+        for (var i = 0, l = geometry.faces.length; i < l; i++) {
 
-        var face = geometry.faces[i];
-        face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+            var face = geometry.faces[i];
+            face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+            face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+            face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
 
-    }
+        }
 
-    material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
+        material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
 
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-
-    // objects
-
-    geometry = new THREE.BoxGeometry(20, 20, 20);
-
-    for (var i = 0, l = geometry.faces.length; i < l; i++) {
-
-        var face = geometry.faces[i];
-        face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
-    }
-
-    for (var i = 0; i < 500; i++) {
-
-        material = new THREE.MeshPhongMaterial({
-            specular: 0xffffff,
-            shading: THREE.FlatShading,
-            vertexColors: THREE.VertexColors
-        });
-
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-        mesh.position.y = Math.floor(Math.random() * 20) * 20 + 10;
-        mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
+        mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+        // objects
 
-        objects.push(mesh);
+        geometry = new THREE.BoxGeometry(20, 20, 20);
 
-    }
+        for (var i = 0, l = geometry.faces.length; i < l; i++) {
 
-    //
+            var face = geometry.faces[i];
+            face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+            face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+            face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0xffffff);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+        }
 
-    document.body.appendChild(renderer.domElement);
+        for (var i = 0; i < 500; i++) {
 
-    //
+            material = new THREE.MeshPhongMaterial({
+                specular: 0xffffff,
+                shading: THREE.FlatShading,
+                vertexColors: THREE.VertexColors
+            });
 
-    window.addEventListener('resize', onWindowResize, false);
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
+            mesh.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+            mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
+            scene.add(mesh);
+
+            material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
+
+            objects.push(mesh);
+
+        }
+
+        //
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0xffffff);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+
+        //
+
+        window.addEventListener('resize', onWindowResize, false);
+    });
 
 }
 
