@@ -1,0 +1,573 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  Deep Exploration 6.3 6.3.3.8068
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Partie_noir
+Ka 0 0 0
+Kd 0 0 0
+Ks 0 0 0
+illum 2
+Ns 8
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Dessous_texture
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0329412 0.0329412 0.0329412
+illum 2
+Ns 8
+map_Kd undercarriage.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Interieur
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0188235 0.0188235 0.0188235
+illum 2
+Ns 32
+map_Kd nodamage.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Plastique_noir
+Ka 0 0 0
+Kd 0.164706 0.164706 0.164706
+Ks 0.0247059 0.0247059 0.0247059
+illum 2
+Ns 8
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Mirroir
+Ka 0 0 0
+Kd 0.231373 0.231373 0.231373
+Ks 0.138824 0.138824 0.138824
+illum 2
+Ns 64
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Pneu
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.00486274 0.00486274 0.00486274
+illum 2
+Ns 64
+map_Kd tirea0.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jante_texture
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.438353 0.438353 0.438353
+illum 2
+Ns 14.9285
+map_Kd wheel.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Chrome
+Ka 0 0 0
+Kd 0.415686 0.415686 0.415686
+Ks 0.361647 0.361647 0.361647
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Vitre
+Ka 0 0 0
+Kd 0.184314 0.235294 0.227451
+Ks 0.110588 0.141176 0.136471
+illum 2
+Ns 16
+d 0.32
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_vitre
+Ka 0 0 0
+Kd 0.4 0.427451 0.435294
+Ks 0.128 0.136784 0.139294
+illum 2
+Ns 16
+d 0.33
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Vitre_noir
+Ka 0 0 0
+Kd 0.0392157 0.0392157 0.0392157
+Ks 0.027451 0.027451 0.027451
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Vitre_toit
+Ka 0 0 0
+Kd 0.0784314 0.105882 0.101961
+Ks 0.0470588 0.0635294 0.0611765
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Logo
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.152157 0.110588 0.0541176
+illum 2
+Ns 64
+map_Kd nodamage.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Plastique_gris
+Ka 0 0 0
+Kd 0.317647 0.317647 0.317647
+Ks 0.0428824 0.0428824 0.0428824
+illum 2
+Ns 19.6983
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Metal_texture
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.104706 0.104706 0.104706
+illum 2
+Ns 64
+map_Kd nodamage.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Body
+Ka 0 0 0
+Kd 0.501961 0.490196 0.47451
+Ks 0.311216 0.303922 0.294196
+illum 2
+Ns 13.9288
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jante
+Ka 0 0 0
+Kd 0.545725 0.545725 0.545725
+Ks 0.415059 0.415059 0.415059
+illum 2
+Ns 14.9285
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_vitre_b
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.218353 0.218353 0.218353
+illum 2
+Ns 16
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_chrome_text
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0923529 0.0923529 0.0923529
+illum 2
+Ns 64
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_bas
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.135686 0.135686 0.135686
+illum 2
+Ns 64
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Metal_alu
+Ka 0 0 0
+Kd 0.47451 0.47451 0.47451
+Ks 0.284706 0.284706 0.284706
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_gris
+Ka 0 0 0
+Kd 0.294412 0.294412 0.294412
+Ks 0.0576471 0.0576471 0.0576471
+illum 2
+Ns 34.2967
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Motor
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0207843 0.0207843 0.0207843
+illum 2
+Ns 45.2548
+map_Kd nodamage.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Clignotant
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.235183 0.235183 0.235183
+illum 2
+Ns 8
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_stop
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0835294 0.00764706 0.00764706
+illum 2
+Ns 64
+d 0.92
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_chrome
+Ka 0 0 0
+Kd 0.415686 0.415686 0.415686
+Ks 0.361647 0.361647 0.361647
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_rouge
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0835294 0.00764706 0.00764706
+illum 2
+Ns 64
+d 0.82
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_rouge_2
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0835294 0.00764706 0.00764706
+illum 2
+Ns 64
+d 0.81
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Feux_blanc
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.137647 0.137647 0.137647
+illum 2
+Ns 64
+d 0.52
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_texture
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.178824 0.178824 0.178824
+illum 2
+Ns 64
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare
+Ka 0 0 0
+Kd 0.282353 0.282353 0.282353
+Ks 0.245647 0.245647 0.245647
+illum 2
+Ns 16
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Phare_optique
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0832941 0.0832941 0.0832941
+illum 2
+Ns 22.6274
+d 0.865
+map_Kd lights.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Disk
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0209412 0.0209412 0.0209412
+illum 2
+Ns 64
+map_Kd BRAKDISC.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Frein
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.0152941 0.0152941 0.0152941
+illum 2
+Ns 64
+map_Kd BRERA MI.jp2
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Explorer_Default
+Ka 0.117647 0.117647 0.117647
+Kd 0.752941 0.752941 0.752941
+Ks 0.752941 0.752941 0.752941
+illum 2
+Ns 8
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
