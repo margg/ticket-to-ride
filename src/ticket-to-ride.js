@@ -190,13 +190,13 @@ function init(callback) {
 
         geometry.computeTangents();
         car = THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
-        car.position.set(0, -4, -15);
+        car.position.set(0, 5, -30);
         car.rotation.z = Math.PI;
         car.rotation.x = -Math.PI / 2;
 
         // car.add(camera);
         // scene.add(car);
-        camera.add(car);
+        scene.add(car);
 
         controls = new THREE.PointerLockControls(camera);
         scene.add(controls.getObject());
