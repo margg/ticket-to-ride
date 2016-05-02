@@ -6,6 +6,6 @@ target/
 
 lib/
 
-Constraints*/
-Model Animation*/
-Rigid body*/
+Constraints*
+Model Animation*
+Rigid body*
