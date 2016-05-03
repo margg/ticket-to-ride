@@ -179,7 +179,7 @@ function init(callback) {
             name: 'carrrr',
             targetObject: car,
             cameraPosition: new THREE.Vector3(0, 22, 15),
-            fixed: true,
+            fixed: false,
             stiffness: 0.1,
             matchRotation: false
         });
@@ -195,7 +195,7 @@ function init(callback) {
             matchRotation: true
         });
 
-        camera.setTarget( 'car-inside' );
+        camera.setTarget( 'carrrr' );
 
         scene.add(car);
         scene.add(camera);
