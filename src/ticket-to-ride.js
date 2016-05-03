@@ -116,10 +116,20 @@ function init(callback) {
 
     }
 
-    material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
+    // material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
+    //
+    // mesh = new THREE.Mesh(geometry, material);
+    // scene.add(mesh);
 
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    var floorTexture = new THREE.ImageUtils.loadTexture( 'http://localhost:8000/images/grasslight-big.png' );
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set( 10, 10 );
+    var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+    var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.position.y = -0.5;
+    floor.rotation.x = Math.PI / 2;
+    scene.add(floor);
 
     // objects
 
@@ -179,7 +189,7 @@ function init(callback) {
             name: 'carrrr',
             targetObject: car,
             cameraPosition: new THREE.Vector3(0, 22, 15),
-            fixed: true,
+            fixed: false,
             stiffness: 0.1,
             matchRotation: false
         });
@@ -195,7 +205,7 @@ function init(callback) {
             matchRotation: true
         });
 
-        camera.setTarget( 'car-inside' );
+        camera.setTarget( 'carrrr' );
 
         scene.add(car);
         scene.add(camera);
