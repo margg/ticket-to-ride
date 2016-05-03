@@ -1,6 +1,6 @@
 var camera, scene, renderer;
 var geometry, material, mesh;
-var controls, time = Date.now();
+var time = Date.now();
 
 var objects = [];
 
@@ -18,35 +18,21 @@ var car;
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 if (havePointerLock) {
-
     var element = document.body;
 
     var pointerlockchange = function (event) {
-
         if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
-
-            controls.enabled = true;
-
             blocker.style.display = 'none';
-
         } else {
-
-            controls.enabled = false;
-
             blocker.style.display = '-webkit-box';
             blocker.style.display = '-moz-box';
             blocker.style.display = 'box';
-
             instructions.style.display = '';
-
         }
-
     };
 
     var pointerlockerror = function (event) {
-
         instructions.style.display = '';
-
     };
 
     // Hook pointer lock state change events
@@ -59,7 +45,6 @@ if (havePointerLock) {
     document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 
     instructions.addEventListener('click', function (event) {
-
         instructions.style.display = 'none';
 
         // Ask the browser to lock the pointer
@@ -70,20 +55,15 @@ if (havePointerLock) {
             var fullscreenchange = function (event) {
 
                 if (document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
-
                     document.removeEventListener('fullscreenchange', fullscreenchange);
                     document.removeEventListener('mozfullscreenchange', fullscreenchange);
-
                     element.requestPointerLock();
                 }
-
             };
-
             document.addEventListener('fullscreenchange', fullscreenchange, false);
             document.addEventListener('mozfullscreenchange', fullscreenchange, false);
 
             element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
-
             element.requestFullscreen();
         } else {
             element.requestPointerLock();
@@ -97,7 +77,7 @@ init(animate);
 
 function init(callback) {
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+    camera = new THREE.TargetCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0xffffff, 0, 750);
@@ -154,8 +134,7 @@ function init(callback) {
 
     }
 
-    for (var i = 0; i < 500; i++) {
-
+    for (var i = 0; i < 100; i++) {
         material = new THREE.MeshPhongMaterial({
             specular: 0xffffff,
             shading: THREE.FlatShading,
@@ -164,16 +143,13 @@ function init(callback) {
 
         var mesh = new THREE.Mesh(geometry, material);
         mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-        mesh.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+        mesh.position.y = 5;
         mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
         scene.add(mesh);
 
         material.color.setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
         objects.push(mesh);
-
     }
-
     //
 
     renderer = new THREE.WebGLRenderer();
@@ -187,23 +163,42 @@ function init(callback) {
     window.addEventListener('resize', onWindowResize, false);
 
 
+    var carModelUrl = "http://localhost:8000/models/panamera/panamera.js";
+
     // load ascii model
     var jsonLoader = new THREE.JSONLoader();
-    jsonLoader.load("http://localhost:8000/models/panamera/panamera.js", function (geometry, materials) {
+    jsonLoader.load(carModelUrl, function (geometry, materials) {
 
         geometry.computeTangents();
         car = THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
-        car.position.set(0, 5, -30);
+        car.position.set(0, 4.5, -30);
         car.rotation.z = Math.PI;
         car.rotation.x = -Math.PI / 2;
 
-        // car.add(camera);
-        // scene.add(car);
+        camera.addTarget({
+            name: 'carrrr',
+            targetObject: car,
+            cameraPosition: new THREE.Vector3(0, 22, 15),
+            fixed: true,
+            stiffness: 0.1,
+            matchRotation: false
+        });
+        camera.addTarget({
+            name: 'car-inside',
+            targetObject: car,
+            // cameraPosition: new THREE.Vector3(-0.6, 0.12, 0),
+            // cameraRotation: new THREE.Euler(-Math.PI/2, 0, Math.PI),
+            cameraPosition: new THREE.Vector3(0, 0.2, 0),
+            cameraRotation: new THREE.Euler(-1.4, 0, Math.PI),
+            fixed: false,
+            stiffness: 1,
+            matchRotation: true
+        });
+
+        camera.setTarget( 'car-inside' );
+
         scene.add(car);
-
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
-
+        scene.add(camera);
 
         callback();
     });
@@ -211,24 +206,16 @@ function init(callback) {
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize(window.innerWidth, window.innerHeight);
-
 }
 
 function animate() {
-
     requestAnimationFrame(animate);
 
-    //
-
-    controls.isOnObject(false);
-
     delta = clock.getDelta();
-    var moveDistance = 100 * delta;
+    var moveDistance = 40 * delta;
 
     // move forwards / backwards
     if (keyboard.pressed("down")) {
@@ -245,22 +232,7 @@ function animate() {
         car.rotation.z -= delta;
     }
 
-    ray.ray.origin.copy(controls.getObject().position);
-    ray.ray.origin.y -= 10;
-
-    var intersections = ray.intersectObjects(objects);
-
-    if (intersections.length > 0) {
-        var distance = intersections[0].distance;
-        if (distance > 0 && distance < 10) {
-            controls.isOnObject(true);
-        }
-    }
-
-    controls.update(Date.now() - time);
-
+    camera.update();
     renderer.render(scene, camera);
-
     time = Date.now();
-
 }
