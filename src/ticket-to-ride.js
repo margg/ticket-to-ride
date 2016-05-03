@@ -5,11 +5,15 @@ var controls, time = Date.now();
 var objects = [];
 
 var ray;
-
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
 
 // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+var delta;
+var car;
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -184,7 +188,6 @@ function init(callback) {
 
 
     // load ascii model
-    var car;
     var jsonLoader = new THREE.JSONLoader();
     jsonLoader.load("http://localhost:8000/models/panamera/panamera.js", function (geometry, materials) {
 
@@ -201,10 +204,6 @@ function init(callback) {
         controls = new THREE.PointerLockControls(camera);
         scene.add(controls.getObject());
 
-        // scene.add(car);
-
-        controls = new THREE.PointerLockControls(camera);
-        scene.add(controls.getObject());
 
         callback();
     });
@@ -228,21 +227,34 @@ function animate() {
 
     controls.isOnObject(false);
 
+    delta = clock.getDelta();
+    var moveDistance = 100 * delta;
+
+    // move forwards / backwards
+    if (keyboard.pressed("down")) {
+        car.translateZ(-moveDistance);
+    }
+    if (keyboard.pressed("up")) {
+        car.translateZ(moveDistance);
+    }
+    // rotate left/right
+    if (keyboard.pressed("left")) {
+        car.rotation.y += delta;
+    }
+    if (keyboard.pressed("right")) {
+        car.rotation.y -= delta;
+    }
+
     ray.ray.origin.copy(controls.getObject().position);
     ray.ray.origin.y -= 10;
 
     var intersections = ray.intersectObjects(objects);
 
     if (intersections.length > 0) {
-
         var distance = intersections[0].distance;
-
         if (distance > 0 && distance < 10) {
-
             controls.isOnObject(true);
-
         }
-
     }
 
     controls.update(Date.now() - time);
