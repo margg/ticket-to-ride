@@ -232,17 +232,17 @@ function animate() {
 
     // move forwards / backwards
     if (keyboard.pressed("down")) {
-        car.translateZ(-moveDistance);
+        car.translateY(moveDistance);
     }
     if (keyboard.pressed("up")) {
-        car.translateZ(moveDistance);
+        car.translateY(-moveDistance);
     }
     // rotate left/right
     if (keyboard.pressed("left")) {
-        car.rotation.y += delta;
+        car.rotation.z += delta;
     }
     if (keyboard.pressed("right")) {
-        car.rotation.y -= delta;
+        car.rotation.z -= delta;
     }
 
     ray.ray.origin.copy(controls.getObject().position);
