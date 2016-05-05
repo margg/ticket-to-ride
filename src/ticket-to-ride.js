@@ -107,20 +107,6 @@ function init(callback) {
 
     }
 
-    for (var i = 0, l = geometry.faces.length; i < l; i++) {
-
-        var face = geometry.faces[i];
-        face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-        face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-
-    }
-
-    // material = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors});
-    //
-    // mesh = new THREE.Mesh(geometry, material);
-    // scene.add(mesh);
-
     var floorTexture = new THREE.ImageUtils.loadTexture( 'http://localhost:8000/images/grasslight-big.png' );
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set( 10, 10 );
@@ -151,7 +137,7 @@ function init(callback) {
             vertexColors: THREE.VertexColors
         });
 
-        var mesh = new THREE.Mesh(geometry, material);
+        var mesh = createMesh(geometry, "brick-wall.jpg")
         mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
         mesh.position.y = 5;
         mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
@@ -215,6 +201,15 @@ function init(callback) {
 
 }
 
+function createMesh(geom, imageFile) {
+    var texture = THREE.ImageUtils.loadTexture
+    ("http://localhost:8000/images/" + imageFile)
+    var mat = new THREE.MeshPhongMaterial();
+    mat.map = texture;
+    var mesh = new THREE.Mesh(geom, mat);
+    return mesh;
+}
+
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -235,10 +230,10 @@ function animate() {
         car.translateY(-moveDistance);
     }
     // rotate left/right
-    if (keyboard.pressed("left")) {
+    if ((keyboard.pressed("down") || keyboard.pressed("up"))&& keyboard.pressed("left")) {
         car.rotation.z += delta;
     }
-    if (keyboard.pressed("right")) {
+    if ((keyboard.pressed("down") || keyboard.pressed("up")) && keyboard.pressed("right")) {
         car.rotation.z -= delta;
     }
 
