@@ -202,8 +202,7 @@ function init(callback) {
 }
 
 function createMesh(geom, imageFile) {
-    var texture = THREE.ImageUtils.loadTexture
-    ("http://localhost:8000/images/" + imageFile)
+    var texture = THREE.ImageUtils.loadTexture("http://localhost:8000/images/" + imageFile);
     var mat = new THREE.MeshPhongMaterial();
     mat.map = texture;
     var mesh = new THREE.Mesh(geom, mat);
@@ -230,11 +229,17 @@ function animate() {
         car.translateY(-moveDistance);
     }
     // rotate left/right
-    if ((keyboard.pressed("down") || keyboard.pressed("up"))&& keyboard.pressed("left")) {
+    if (keyboard.pressed("up") && keyboard.pressed("left")) {
         car.rotation.z += delta;
     }
-    if ((keyboard.pressed("down") || keyboard.pressed("up")) && keyboard.pressed("right")) {
+    if (keyboard.pressed("down") && keyboard.pressed("left")) {
         car.rotation.z -= delta;
+    }
+    if (keyboard.pressed("up") && keyboard.pressed("right")) {
+        car.rotation.z -= delta;
+    }
+    if (keyboard.pressed("down") && keyboard.pressed("right")) {
+        car.rotation.z += delta;
     }
 
     camera.update();
