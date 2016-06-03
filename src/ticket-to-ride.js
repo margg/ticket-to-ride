@@ -14,6 +14,7 @@ var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var delta;
 var car;
+var vehicle;
 var CAMERA_VIEW_OUTSIDE = 'car-outside';
 var CAMERA_VIEW_INSIDE = 'car-inside';
 var cameraView = CAMERA_VIEW_OUTSIDE;
@@ -151,13 +152,13 @@ function init(callback) {
             new THREE.MeshLambertMaterial({
                 map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/brick-wall.jpg")
             }),
-            .8, // high friction
+            .1, // high friction
             .4 // low restitution
         );
-        var mesh = new Physijs.BoxMesh(geometry, mat);
+        var mesh = new Physijs.BoxMesh(geometry, mat, 100000);
 
         mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-        mesh.position.y = 50;
+        mesh.position.y = 10;
         mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
         mesh.__dirtyRotation = true;
         scene.add(mesh);
@@ -177,9 +178,10 @@ function init(callback) {
             car_geometry,
             new THREE.MeshFaceMaterial( car_materials )
         );
-        car.position.set(0, 4.5, -30);
+        car.position.set(0, 4.5, 250);
         car.rotation.z = Math.PI;
         car.rotation.x = -Math.PI / 2;
+        car.__dirtyRotation = true;
 
         camera.addTarget({
             name: CAMERA_VIEW_OUTSIDE,
@@ -209,17 +211,6 @@ function init(callback) {
 
 }
 
-function createMesh(geom, texture) {
-    var mat = Physijs.createMaterial(
-        new THREE.MeshLambertMaterial({
-            map: texture
-        }),
-        .8, // high friction
-        .4 // low restitution
-    );
-    return new Physijs.BoxMesh(geom, mat);
-}
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -240,17 +231,11 @@ function animate() {
         car.translateY(-moveDistance);
     }
     // rotate left/right
-    if (keyboard.pressed("up") && keyboard.pressed("left")) {
+    if (keyboard.pressed("up") && keyboard.pressed("left") || (keyboard.pressed("down") && keyboard.pressed("right"))) {
         car.rotation.z += delta;
     }
-    if (keyboard.pressed("down") && keyboard.pressed("left")) {
+    if ((keyboard.pressed("down") && keyboard.pressed("left")) || (keyboard.pressed("up") && keyboard.pressed("right"))) {
         car.rotation.z -= delta;
-    }
-    if (keyboard.pressed("up") && keyboard.pressed("right")) {
-        car.rotation.z -= delta;
-    }
-    if (keyboard.pressed("down") && keyboard.pressed("right")) {
-        car.rotation.z += delta;
     }
 
     if (keyboard.pressed("c")) {
@@ -258,6 +243,8 @@ function animate() {
         camera.setTarget(cameraView);
     }
 
+    car.__dirtyRotation = true;
+    car.__dirtyPosition = true;
     camera.update();
     scene.simulate();
     renderer.render(scene, camera);
