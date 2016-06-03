@@ -14,6 +14,10 @@ var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var delta;
 var car;
+var CAMERA_VIEW_OUTSIDE = 'car-outside';
+var CAMERA_VIEW_INSIDE = 'car-inside';
+var cameraView = CAMERA_VIEW_OUTSIDE;
+var SERVER_ADDRESS = "http://localhost:8000/";
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -107,10 +111,10 @@ function init(callback) {
 
     }
 
-    var floorTexture = new THREE.ImageUtils.loadTexture( 'http://localhost:8000/images/grasslight-big.png' );
+    var floorTexture = new THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/grasslight-big.png");
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set( 10, 10 );
-    var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+    floorTexture.repeat.set(10, 10);
+    var floorMaterial = new THREE.MeshBasicMaterial({map: floorTexture, side: THREE.DoubleSide});
     var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.position.y = -0.5;
@@ -137,7 +141,7 @@ function init(callback) {
             vertexColors: THREE.VertexColors
         });
 
-        var mesh = createMesh(geometry, "brick-wall.jpg")
+        var mesh = createMesh(geometry, "brick-wall.jpg");
         mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
         mesh.position.y = 5;
         mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
@@ -159,7 +163,7 @@ function init(callback) {
     window.addEventListener('resize', onWindowResize, false);
 
 
-    var carModelUrl = "http://localhost:8000/models/panamera/panamera.js";
+    var carModelUrl = SERVER_ADDRESS + "models/panamera/panamera.js";
 
     // load ascii model
     var jsonLoader = new THREE.JSONLoader();
@@ -172,7 +176,7 @@ function init(callback) {
         car.rotation.x = -Math.PI / 2;
 
         camera.addTarget({
-            name: 'carrrr',
+            name: CAMERA_VIEW_OUTSIDE,
             targetObject: car,
             cameraPosition: new THREE.Vector3(0, 22, 15),
             fixed: false,
@@ -180,10 +184,8 @@ function init(callback) {
             matchRotation: false
         });
         camera.addTarget({
-            name: 'car-inside',
+            name: CAMERA_VIEW_INSIDE,
             targetObject: car,
-            // cameraPosition: new THREE.Vector3(-0.6, 0.12, 0),
-            // cameraRotation: new THREE.Euler(-Math.PI/2, 0, Math.PI),
             cameraPosition: new THREE.Vector3(0, 0.2, 0),
             cameraRotation: new THREE.Euler(-1.4, 0, Math.PI),
             fixed: false,
@@ -191,7 +193,7 @@ function init(callback) {
             matchRotation: true
         });
 
-        camera.setTarget( 'carrrr' );
+        camera.setTarget(cameraView);
 
         scene.add(car);
         scene.add(camera);
@@ -202,7 +204,7 @@ function init(callback) {
 }
 
 function createMesh(geom, imageFile) {
-    var texture = THREE.ImageUtils.loadTexture("http://localhost:8000/images/" + imageFile);
+    var texture = THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/" + imageFile);
     var mat = new THREE.MeshPhongMaterial();
     mat.map = texture;
     var mesh = new THREE.Mesh(geom, mat);
@@ -240,6 +242,11 @@ function animate() {
     }
     if (keyboard.pressed("down") && keyboard.pressed("right")) {
         car.rotation.z += delta;
+    }
+
+    if (keyboard.pressed("c")) {
+        cameraView = cameraView == 'car-inside' ? 'car-outside' : 'car-inside';
+        camera.setTarget(cameraView);
     }
 
     camera.update();
