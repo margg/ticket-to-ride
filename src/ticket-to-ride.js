@@ -20,6 +20,7 @@ var CAMERA_VIEW_INSIDE = 'car-inside';
 var cameraView = CAMERA_VIEW_OUTSIDE;
 var SERVER_ADDRESS = "http://localhost:8000/";
 
+
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 if (havePointerLock) {
@@ -95,8 +96,8 @@ function init(callback) {
     // camera and scene
 
     camera = new THREE.TargetCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-
     scene = new Physijs.Scene();
+
     scene.setGravity(new THREE.Vector3( 0, -50, 0 ));
 
     scene.fog = new THREE.Fog(0xffffff, 0, 750);
@@ -167,6 +168,68 @@ function init(callback) {
     }
 
     var carModelUrl = SERVER_ADDRESS + "models/panamera/panamera.js";
+
+    var onRenderFcts= [];
+    var sunAngle = -1/6*Math.PI*2;
+    var sunAngle = -3/6*Math.PI*2;
+    onRenderFcts.push(function(delta, now){
+        var dayDuration	= 10	// nb seconds for a full day cycle
+        sunAngle	+= delta/dayDuration * Math.PI*2
+    })
+
+    var starField	= new THREEx.DayNight.StarField()
+    scene.add(starField.object3d)
+    onRenderFcts.push(function(delta, now){
+        starField.update(sunAngle)
+    })
+
+    var sunSphere	= new THREEx.DayNight.SunSphere()
+    scene.add( sunSphere.object3d )
+    onRenderFcts.push(function(delta, now){
+        sunSphere.update(sunAngle)
+    })
+
+    var sunLight	= new THREEx.DayNight.SunLight()
+    scene.add( sunLight.object3d )
+    onRenderFcts.push(function(delta, now){
+        sunLight.update(sunAngle)
+    })
+
+    var skydom	= new THREEx.DayNight.Skydom()
+    scene.add( skydom.object3d )
+    onRenderFcts.push(function(delta, now){
+        skydom.update(sunAngle)
+    })
+
+    var geometry	= new THREE.TorusKnotGeometry(0.5-0.15, 0.15)
+    var material	= new THREE.MeshPhongMaterial({
+        shading	: THREE.SmoothShading,
+    });
+    var mesh	= new THREE.Mesh( geometry, material )
+    scene.add( mesh )
+    onRenderFcts.push(function(delta){
+        mesh.rotateY(delta * Math.PI*2 *0.2)
+        mesh.rotateX(delta * Math.PI*2 *0.1)
+    })
+
+    onRenderFcts.push(function(){
+        renderer.render( scene, camera );
+    })
+
+    var lastTimeMsec= null
+    requestAnimationFrame(function animate(nowMsec){
+        // keep looping
+        requestAnimationFrame( animate );
+        // measure time
+        lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+        var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+        lastTimeMsec	= nowMsec
+        // call each update function
+        onRenderFcts.forEach(function(onRenderFct){
+            onRenderFct(deltaMsec/1000, nowMsec/1000)
+        })
+    })
+
 
     // load ascii model
     var jsonLoader = new THREE.JSONLoader();
