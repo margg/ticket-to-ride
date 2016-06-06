@@ -4,7 +4,7 @@
 out/
 target/
 
-lib/
+lib/Physijs/examples/
 
 Constraints*
 Model Animation*
