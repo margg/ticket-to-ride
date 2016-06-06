@@ -7,6 +7,15 @@ var car;
 var specialBox;
 var points = 0;
 
+// daynight
+var lastTimeMsec = null;
+var onRenderFcts = [];
+var sunAngle;
+var starField;
+var sunSphere;
+var sunLight;
+var skydom;
+
 var CAMERA_VIEW_OUTSIDE = 'car-outside';
 var CAMERA_VIEW_INSIDE = 'car-inside';
 var cameraView = CAMERA_VIEW_OUTSIDE;
@@ -36,10 +45,11 @@ function init() {
     createBuildings(100);
     createSpecialBox();
 
+    createSunligt();
+
     var jsonLoader = new THREE.JSONLoader();
     jsonLoader.load(SERVER_ADDRESS + "models/panamera/panamera.js", onCarLoaded);
 }
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -121,6 +131,42 @@ function spawnSpecialBox() {
     }
 }
 
+function createSunligt() {
+    sunAngle = -1 / 6 * Math.PI * 2;
+    onRenderFcts.push(function (delta, now) {
+        var dayDuration = 20;	// number of seconds per a full day cycle
+        sunAngle += delta / dayDuration * Math.PI * 2
+    });
+
+    starField = new THREEx.DayNight.StarField();
+    scene.add(starField.object3d);
+    onRenderFcts.push(function (delta, now) {
+        starField.update(sunAngle);
+    });
+
+    sunSphere = new THREEx.DayNight.SunSphere();
+    scene.add(sunSphere.object3d);
+    onRenderFcts.push(function (delta, now) {
+        sunSphere.update(sunAngle)
+    });
+
+    sunLight = new THREEx.DayNight.SunLight();
+    scene.add(sunLight.object3d);
+    onRenderFcts.push(function (delta, now) {
+        sunLight.update(sunAngle);
+    });
+
+    skydom = new THREEx.DayNight.Skydom();
+    scene.add(skydom.object3d);
+    onRenderFcts.push(function (delta, now) {
+        skydom.update(sunAngle)
+    });
+
+    onRenderFcts.push(function () {
+        renderer.render(scene, camera);
+    });
+}
+
 function onCarLoaded(carGeometry, carMaterials) {
     carGeometry.computeTangents();
 
@@ -139,7 +185,7 @@ function onCarLoaded(carGeometry, carMaterials) {
 
     scene.add(car);
 
-    animate();
+    animate(200);
 }
 
 function createCameraTargets(targetObject) {
@@ -162,29 +208,15 @@ function createCameraTargets(targetObject) {
     });
 }
 
-function animate() {
+function animate(nowMsec) {
     requestAnimationFrame(animate);
 
     delta = clock.getDelta();
-    var moveDistance = 40 * delta;
 
-    // move forwards / backwards
-    if (keyboard.pressed("down")) {
-        car.translateY(moveDistance);
-    }
-    if (keyboard.pressed("up")) {
-        car.translateY(-moveDistance);
-    }
-    // rotate left/right
-    if (keyboard.pressed("up") && keyboard.pressed("left") || (keyboard.pressed("down") && keyboard.pressed("right"))) {
-        car.rotation.z += delta;
-    }
-    if ((keyboard.pressed("down") && keyboard.pressed("left")) || (keyboard.pressed("up") && keyboard.pressed("right"))) {
-        car.rotation.z -= delta;
-    }
+    updateCarPosition(40 * delta, delta);
 
     if (keyboard.pressed("c")) {
-        cameraView = cameraView == 'car-inside' ? 'car-outside' : 'car-inside';
+        cameraView = cameraView == CAMERA_VIEW_INSIDE ? CAMERA_VIEW_OUTSIDE : CAMERA_VIEW_INSIDE;
         camera.setTarget(cameraView);
     }
 
@@ -194,9 +226,38 @@ function animate() {
         spawnSpecialBox();
     }
 
-    car.__dirtyRotation = true;
-    car.__dirtyPosition = true;
+    updateDaynight(nowMsec);
+
     camera.update();
     scene.simulate();
     renderer.render(scene, camera);
+}
+
+function updateCarPosition(positionDelta, rotationDelta) {
+    // move forwards / backwards
+    if (keyboard.pressed("down")) {
+        car.translateY(positionDelta);
+    }
+    if (keyboard.pressed("up")) {
+        car.translateY(-positionDelta);
+    }
+    // rotate left/right
+    if (keyboard.pressed("up") && keyboard.pressed("left") || (keyboard.pressed("down") && keyboard.pressed("right"))) {
+        car.rotation.z += rotationDelta;
+    }
+    if ((keyboard.pressed("down") && keyboard.pressed("left")) || (keyboard.pressed("up") && keyboard.pressed("right"))) {
+        car.rotation.z -= rotationDelta;
+    }
+    car.__dirtyRotation = true;
+    car.__dirtyPosition = true;
+}
+
+function updateDaynight(nowMsec) {
+    lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
+    var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+    lastTimeMsec = nowMsec;
+    // call each update function
+    onRenderFcts.forEach(function (onRenderFct) {
+        onRenderFct(deltaMsec / 1000, nowMsec / 1000)
+    });
 }
