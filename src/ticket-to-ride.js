@@ -14,7 +14,9 @@ var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var delta;
 var car;
-var vehicle;
+var specialBoxes = [];
+var boxesHit = 0;
+var BOXES_TO_HIT = 5;
 var CAMERA_VIEW_OUTSIDE = 'car-outside';
 var CAMERA_VIEW_INSIDE = 'car-inside';
 var cameraView = CAMERA_VIEW_OUTSIDE;
@@ -97,7 +99,7 @@ function init(callback) {
     camera = new THREE.TargetCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
     scene = new Physijs.Scene();
-    scene.setGravity(new THREE.Vector3( 0, -50, 0 ));
+    scene.setGravity(new THREE.Vector3(0, -50, 0));
 
     scene.fog = new THREE.Fog(0xffffff, 0, 750);
 
@@ -113,7 +115,6 @@ function init(callback) {
     ray.ray.direction.set(0, -1, 0);
 
     // floor
-
     var floorTexture = new THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/grasslight-big.png");
     var floorMaterial = Physijs.createMaterial(
         new THREE.MeshLambertMaterial({
@@ -127,10 +128,6 @@ function init(callback) {
     floorMaterial.map.repeat.set(10, 10);
 
     var floorGeometry = new THREE.BoxGeometry(1000, 1000, 10, 10, 10, 1);
-    // var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-
-    // floorGeometry.computeFaceNormals();
-    // floorGeometry.computeVertexNormals();
 
     var floor = new Physijs.BoxMesh(
         floorGeometry,
@@ -148,19 +145,37 @@ function init(callback) {
     geometry = new THREE.BoxGeometry(20, 20, 20);
 
     for (var i = 0; i < 100; i++) {
-        var mat = Physijs.createMaterial(
-            new THREE.MeshLambertMaterial({
-                map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/brick-wall.jpg")
-            }),
-            .1, // high friction
-            .4 // low restitution
-        );
-        var mesh = new Physijs.BoxMesh(geometry, mat, 100000);
+        var mesh, mat;
+
+        // if (i < BOXES_TO_HIT) {
+            // mat = Physijs.createMaterial(
+            //     new THREE.MeshLambertMaterial({
+            //         map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/checkerboard.png")
+            //     }),
+            //     .8, // high friction
+            //     .4 // low restitution
+            // );
+            // mesh = new Physijs.BoxMesh(geometry, mat, 100000);
+            //
+            // mesh.addEventListener( 'collision', onCarCollision);
+            // specialBoxes.push(mesh);
+
+        // } else {
+            mat = Physijs.createMaterial(
+                new THREE.MeshLambertMaterial({
+                    map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/brick-wall.jpg")
+                }),
+                .8, // high friction
+                .4 // low restitution
+            );
+            mesh = new Physijs.BoxMesh(geometry, mat, 10000);
+        // }
 
         mesh.position.x = Math.floor(Math.random() * 20 - 10) * 20;
         mesh.position.y = 10;
         mesh.position.z = Math.floor(Math.random() * 20 - 10) * 20;
-        mesh.__dirtyRotation = true;
+        mesh.__dirtyPosition = true;
+
         scene.add(mesh);
 
         objects.push(mesh);
@@ -176,12 +191,14 @@ function init(callback) {
 
         car = new Physijs.BoxMesh(
             car_geometry,
-            new THREE.MeshFaceMaterial( car_materials )
+            new THREE.MeshFaceMaterial(car_materials)
         );
         car.position.set(0, 4.5, 250);
         car.rotation.z = Math.PI;
         car.rotation.x = -Math.PI / 2;
         car.__dirtyRotation = true;
+
+        car.addEventListener( 'collision', onCarCollision);
 
         camera.addTarget({
             name: CAMERA_VIEW_OUTSIDE,
@@ -204,11 +221,60 @@ function init(callback) {
         camera.setTarget(cameraView);
 
         scene.add(car);
+        // car.setCcdMotionThreshold(0.1);
+        // car.setCcdSweptSphereRadius(0.2);
+
         scene.add(camera);
+
+        // special box
+
+        var specialBoxMaterial = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({
+                map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/checkerboard.png")
+            }),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var specialBoxMaterial2 = Physijs.createMaterial(
+            new THREE.MeshLambertMaterial({
+                map: THREE.ImageUtils.loadTexture(SERVER_ADDRESS + "images/checkerboard.png")
+            }),
+            .8, // high friction
+            .4 // low restitution
+        );
+        var specialBox = new Physijs.BoxMesh(new THREE.BoxGeometry(10, 10, 10), specialBoxMaterial, 10);
+        var specialBox2 = new Physijs.BoxMesh(new THREE.BoxGeometry(10, 10, 10), specialBoxMaterial2, 10);
+
+        specialBox.position.set(0, 60, 240);
+        specialBox2.position.set(0, 30, 240);
+
+        specialBox.__dirtyPosition = true;
+        specialBox2.__dirtyPosition = true;
+
+        specialBox.addEventListener( 'collision', onCarCollision);
+        specialBox2.addEventListener( 'collision', onCarCollision);
+        specialBoxes.push(specialBox);
+        specialBoxes.push(specialBox2);
+
+        scene.add(specialBox);
+        scene.add(specialBox2);
 
         callback();
     });
 
+}
+
+function onCarCollision(other_object, relative_velocity, relative_rotation, contact_normal) {
+    // `this` has collided with `other_object` with an impact speed of `relative_velocity`
+    // and a rotational force of `relative_rotation` and at normal `contact_normal`
+    if (specialBoxes.indexOf(other_object) !== -1) {
+        boxesHit += 1;
+        console.log("HIT!!!!!!!!!!!!!!!")
+    }
+    if (boxesHit <= 0) {
+        console.log("WON THE GAME!!!")
+    }
+    console.log("COLLISION DETECTED")
 }
 
 function onWindowResize() {
