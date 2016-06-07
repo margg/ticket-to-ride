@@ -45,7 +45,7 @@ function init() {
     createBuildings(100);
     createSpecialBox();
 
-    createSunligt();
+    createSunlight();
 
     var jsonLoader = new THREE.JSONLoader();
     jsonLoader.load(SERVER_ADDRESS + "models/panamera/panamera.js", onCarLoaded);
@@ -131,7 +131,7 @@ function spawnSpecialBox() {
     }
 }
 
-function createSunligt() {
+function createSunlight() {
     sunAngle = -1 / 6 * Math.PI * 2;
     onRenderFcts.push(function (delta, now) {
         var dayDuration = 20;	// number of seconds per a full day cycle
@@ -220,9 +220,9 @@ function animate(nowMsec) {
         camera.setTarget(cameraView);
     }
 
-    if (specialBox.position.y < -20) {
+    if (specialBox.position.y < 0) {
         points++;
-        console.log("Points: " + points);
+        $('.score').html(points);
         spawnSpecialBox();
     }
 

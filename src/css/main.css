@@ -48,3 +48,22 @@ body {
     cursor: pointer;
 
 }
+
+#rank {
+
+    position: fixed;
+    bottom: 0%;
+    right: 5%;
+
+    color: darkblue;
+    text-align: center;
+}
+
+#score {
+    position: fixed;
+    bottom: 0%;
+    right: 2%;
+
+    color: darkblue;
+    text-align: center;
+}
